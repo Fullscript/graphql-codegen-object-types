@@ -1,0 +1,42 @@
+{
+  "name": "@fullscript/graphql-codegen-object-types",
+  "version": "1.0.0",
+  "description": "GraphQL Code Generator plugin for generating an interface with all object types from your schema",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build:types": "tsc --emitDeclarationOnly --declarationMap -declaration --project tsconfig.types.json",
+    "build:babel": "babel src --out-dir dist --ignore 'src/**/*.spec.ts' --extensions .ts",
+    "build": "concurrently \"yarn:build:*\"",
+    "prettier-diff": "prettier --check src",
+    "prettier-format": "prettier --write src",
+    "test": "yarn check --integrity && jest --maxWorkers=2",
+    "watch:types": "yarn run build:types --watch",
+    "watch:babel": "yarn run build:babel --watch",
+    "watch": "concurrently \"yarn:watch:*\""
+  },
+  "peerDependencies": {
+    "graphql": "16.5.0",
+    "graphql-tag": "^2.0.0"
+  },
+  "dependencies": {
+    "@graphql-codegen/plugin-helpers": "^2.6.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/preset-typescript": "^7.18.6",
+    "@graphql-codegen/visitor-plugin-common": "^2.12.1",
+    "@graphql-tools/apollo-engine-loader": "^7.3.13",
+    "concurrently": "^7.4.0",
+    "graphql": "16.5.0",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.3"
+  },
+  "resolutions": {
+    "graphql": "16.5.0"
+  },
+  "main": "dist/index.js"
+}
