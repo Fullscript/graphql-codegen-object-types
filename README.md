@@ -14,13 +14,13 @@ To use **graphql-codegen-object-types** you will also need:
 Add **graphql-codegen-object-types** to your dependencies like so:
 
 Yarn v1:
-- `yarn add <remote-url>`
+- `yarn add https://github.com/Fullscript/graphql-codegen-object-types.git#1.0.0`
 
 Yarn v2 (and onwards):
-- `yarn add @fullscript/graphql-codegen-object-types@<repo-url>`
+- `yarn add @fullscript/graphql-codegen-object-types@https://github.com/Fullscript/graphql-codegen-object-types.git#1.0.0`
 
 NPM:
-- `npm install <remote-url>`
+- `npm install https://github.com/Fullscript/graphql-codegen-object-types.git#1.0.0`
 
 ## Configuration
 
