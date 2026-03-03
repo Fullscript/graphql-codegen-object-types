@@ -16,15 +16,21 @@ var _utils = require("./utils");
 const DEFAULT_IGNORED_SUFFIXES = ["__Directive", "__EnumValue", "__Field", "__InputValue", "__Schema", "__Type"];
 
 /**
- * Filters out and returns GraphQL type names that match the required criteria
+ * Filters out and returns GraphQL type names that match the required criteria.
+ * When allowedTypes is provided, only those types are included (still subject to
+ * default introspection and Input/Enum/Scalar/Union filtering).
  *
  * @param {ObjMap<GraphQLNamedType>} typesMap - A map of all the GraphQL types in the schema
  * @param {string[]} [ignoredSuffixes=[]] - List of type suffixes or names to ignore
+ * @param {string[]} [allowedTypes] - When provided, only these type names are included
  * @returns {string[]} An array of GraphQL type names
  */
-const filterIgnoredSuffixes = (typesMap, ignoredSuffixes = []) => {
+const filterIgnoredSuffixes = (typesMap, ignoredSuffixes = [], allowedTypes) => {
   return Object.keys(typesMap).filter(typeName => {
     const type = typesMap[typeName];
+    if (allowedTypes) {
+      return allowedTypes.includes(typeName) && !(0, _utils.isInputEnumScalarOrUnionType)(type);
+    }
     return ![...DEFAULT_IGNORED_SUFFIXES, ...ignoredSuffixes].some(ignoredType => {
       return typeName.endsWith(ignoredType) || (0, _utils.isInputEnumScalarOrUnionType)(type);
     });
@@ -78,12 +84,13 @@ const plugin = (schema, _documents, config) => {
   const {
     namespacedImportName,
     ignoredSuffixes,
+    allowedTypes,
     useTypeImports,
     interfaceName: configInterfaceName
   } = config;
   const typesMap = schema.getTypeMap();
   const globalTypesNamespace = namespacedImportName ? `${namespacedImportName}.` : "";
-  const filteredTypes = filterIgnoredSuffixes(typesMap, ignoredSuffixes);
+  const filteredTypes = filterIgnoredSuffixes(typesMap, ignoredSuffixes, allowedTypes);
   const interfaceProperties = generateInterfaceProperties(filteredTypes, globalTypesNamespace);
   const interfaceName = getInterfaceName(configInterfaceName);
   const exportStatement = generateExportStatement(useTypeImports, interfaceName);

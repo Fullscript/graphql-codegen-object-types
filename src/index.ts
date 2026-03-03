@@ -17,18 +17,26 @@ const DEFAULT_IGNORED_SUFFIXES = [
 ] as const;
 
 /**
- * Filters out and returns GraphQL type names that match the required criteria
+ * Filters out and returns GraphQL type names that match the required criteria.
+ * When allowedTypes is provided, only those types are included (still subject to
+ * default introspection and Input/Enum/Scalar/Union filtering).
  *
  * @param {ObjMap<GraphQLNamedType>} typesMap - A map of all the GraphQL types in the schema
  * @param {string[]} [ignoredSuffixes=[]] - List of type suffixes or names to ignore
+ * @param {string[]} [allowedTypes] - When provided, only these type names are included
  * @returns {string[]} An array of GraphQL type names
  */
 const filterIgnoredSuffixes = (
   typesMap: ObjMap<GraphQLNamedType>,
-  ignoredSuffixes: string[] = []
+  ignoredSuffixes: string[] = [],
+  allowedTypes?: string[]
 ) => {
   return Object.keys(typesMap).filter(typeName => {
     const type = typesMap[typeName];
+
+    if (allowedTypes) {
+      return allowedTypes.includes(typeName) && !isInputEnumScalarOrUnionType(type);
+    }
 
     return ![...DEFAULT_IGNORED_SUFFIXES, ...ignoredSuffixes].some(ignoredType => {
       return typeName.endsWith(ignoredType) || isInputEnumScalarOrUnionType(type);
@@ -85,13 +93,14 @@ const plugin: PluginFunction<Config, Types.PluginOutput> = (schema, _documents, 
   const {
     namespacedImportName,
     ignoredSuffixes,
+    allowedTypes,
     useTypeImports,
     interfaceName: configInterfaceName,
   } = config;
   const typesMap = schema.getTypeMap();
 
   const globalTypesNamespace = namespacedImportName ? `${namespacedImportName}.` : "";
-  const filteredTypes = filterIgnoredSuffixes(typesMap, ignoredSuffixes);
+  const filteredTypes = filterIgnoredSuffixes(typesMap, ignoredSuffixes, allowedTypes);
 
   const interfaceProperties = generateInterfaceProperties(filteredTypes, globalTypesNamespace);
   const interfaceName = getInterfaceName(configInterfaceName);
