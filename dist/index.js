@@ -28,8 +28,8 @@ const DEFAULT_IGNORED_SUFFIXES = ["__Directive", "__EnumValue", "__Field", "__In
 const filterIgnoredSuffixes = (typesMap, ignoredSuffixes = [], allowedTypes) => {
   return Object.keys(typesMap).filter(typeName => {
     const type = typesMap[typeName];
-    if (allowedTypes) {
-      return allowedTypes.includes(typeName) && !(0, _utils.isInputEnumScalarOrUnionType)(type);
+    if (allowedTypes !== null && allowedTypes !== void 0 && allowedTypes.includes(typeName) && !(0, _utils.isInputEnumScalarOrUnionType)(type)) {
+      return true;
     }
     return ![...DEFAULT_IGNORED_SUFFIXES, ...ignoredSuffixes].some(ignoredType => {
       return typeName.endsWith(ignoredType) || (0, _utils.isInputEnumScalarOrUnionType)(type);

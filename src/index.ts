@@ -34,8 +34,8 @@ const filterIgnoredSuffixes = (
   return Object.keys(typesMap).filter(typeName => {
     const type = typesMap[typeName];
 
-    if (allowedTypes) {
-      return allowedTypes.includes(typeName) && !isInputEnumScalarOrUnionType(type);
+    if (allowedTypes?.includes(typeName) && !isInputEnumScalarOrUnionType(type)) {
+      return true;
     }
 
     return ![...DEFAULT_IGNORED_SUFFIXES, ...ignoredSuffixes].some(ignoredType => {
