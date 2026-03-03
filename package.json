@@ -1,6 +1,6 @@
 {
   "name": "@fullscript/graphql-codegen-object-types",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "GraphQL Code Generator plugin for generating an interface with all object types from your schema",
   "license": "MIT",
   "scripts": {
