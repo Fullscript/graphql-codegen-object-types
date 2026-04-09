@@ -1,6 +1,6 @@
 {
   "name": "@fullscript/graphql-codegen-object-types",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "GraphQL Code Generator plugin for generating an interface with all object types from your schema",
   "license": "MIT",
   "scripts": {
@@ -13,8 +13,7 @@
     "test": "yarn && jest --maxWorkers=2",
     "watch:types": "yarn run build:types --watch",
     "watch:babel": "yarn run build:babel --watch",
-    "watch": "concurrently \"yarn:watch:*\"",
-    "prepack": "yarn build"
+    "watch": "concurrently \"yarn:watch:*\""
   },
   "peerDependencies": {
     "graphql": "16.5.0",
